@@ -1,0 +1,11 @@
+casttube==0.2.0
+certifi==2019.9.11
+chardet==3.0.4
+idna==2.8
+ifaddr==0.1.6
+protobuf==3.9.1
+PyChromecast==4.0.1
+requests==2.22.0
+six==1.12.0
+urllib3==1.25.3
+zeroconf==0.23.0
