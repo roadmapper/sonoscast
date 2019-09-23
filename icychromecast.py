@@ -5,7 +5,9 @@ import requests
 import sys
 import time
 import urllib.parse
+import soco
 
+from soco.events import event_listener
 from pychromecast.controllers.media import MediaStatus
 
 logging.basicConfig(level=logging.INFO)
@@ -21,7 +23,7 @@ class StatusListener:
         Listens to media status changes.
         :param status: the new status
         """
-        logger.info(f'Media status changed to: {status.player_state}, {status.title} - {status.artist}')
+        logger.info(f'Media status changed to: state -> {status.player_state}, title -> {status.title} - {status.artist}, content -> {status.content_type}')
         title = urllib.parse.quote_plus(status.title)
         artist = urllib.parse.quote_plus(status.artist)
         # TODO: might need smarter logic to find the appropriate image to push to Icecast
@@ -33,6 +35,11 @@ class StatusListener:
 
 
 def main(args):
+    sonos_device = soco.discover().pop()
+    sub = sonos_device.zoneGroupTopology.subscribe()
+    event = sub.events.get(timeout=0.5)
+    print(event.)
+
     # Get all Google Cast enabled devices
     chromecasts = pychromecast.get_chromecasts()
 
@@ -47,7 +54,7 @@ def main(args):
 
     for cc in chromecasts:
         logger.info(f'Found device: {cc.device.friendly_name}')
-        if cc.device.friendly_name == args.source_device_name:
+        if cc.device.friendly_name == args.cast_device_name:
             source_device = cc
 
 
@@ -93,13 +100,13 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Say hello')
-    parser.add_argument('source_device_name', help='the Chromecast source device name')
-    parser.add_argument('icecast_host', help='the Icecast 2 server hostname and port')
-    parser.add_argument('icecast_admin_user', help='the Icecast 2 server hostname and port')
-    parser.add_argument('icecast_admin_password', help='the Icecast 2 server hostname and port')
+    parser.add_argument('--cast-device-name', '-c', help='the Chromecast source device name')
+    parser.add_argument('--icecast-address', '-a', help='the Icecast 2 server address')
+    parser.add_argument('--icecast-admin-user', '-u', help='the Icecast 2 server hostname and port')
+    parser.add_argument('--icecast-admin-password', '-p', help='the Icecast 2 server hostname and port')
     args = parser.parse_args()
 
-    icecast_host = args.icecast_host
+    icecast_host = args.icecast_address
     icecast_admin_user = args.icecast_admin_user
     icecast_admin_password = args.icecast_admin_password
 
