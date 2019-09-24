@@ -23,22 +23,22 @@ class StatusListener:
         Listens to media status changes.
         :param status: the new status
         """
-        logger.info(f'Media status changed to: state -> {status.player_state}, title -> {status.title} - {status.artist}, content -> {status.content_type}')
+        logger.info(f'Media status changed to: state -> {status.player_state}, title -> {status.artist} - {status.title}, content -> {status.content_type}')
         title = urllib.parse.quote_plus(status.title)
         artist = urllib.parse.quote_plus(status.artist)
         # TODO: might need smarter logic to find the appropriate image to push to Icecast
         # album_art = status.images[0].url
         if icecast_host:
-            icecast_update_url = f'http://{icecast_host}/admin/metadata?mount=/pi.mp3&mode=updinfo&song={title}+-+{artist}'
+            icecast_update_url = f'http://{icecast_host}/admin/metadata?mount=/pi.mp3&mode=updinfo&song={artist}+-+{title}'
             r = requests.get(icecast_update_url, auth=(icecast_admin_user, icecast_admin_password))
             logger.info(f'Update to Icecast server: {r.status_code}')
 
 
 def main(args):
-    sonos_device = soco.discover().pop()
-    sub = sonos_device.zoneGroupTopology.subscribe()
-    event = sub.events.get(timeout=0.5)
-    print(event.)
+    #sonos_device = soco.discover().pop()
+    #sub = sonos_device.zoneGroupTopology.subscribe()
+    #event = sub.events.get(timeout=0.5)
+    #print(event.)
 
     # Get all Google Cast enabled devices
     chromecasts = pychromecast.get_chromecasts()

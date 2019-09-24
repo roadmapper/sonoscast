@@ -11,7 +11,7 @@ Dependencies
 How to use
 ----------
 
-``icychromecast --icecast-server [icecast host]:[icecast port]``
+``icychromecast.py -c Sonos -u admin -p hackme -a [icecast host]:[icecast port]``
 
 Related
 -------
